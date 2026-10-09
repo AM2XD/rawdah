@@ -1,0 +1,6 @@
+{
+  "name": "Rawdah Graveyard Registry",
+  "description": "Mobile-first, responsive Right-To-Left (RTL) Islamic cemetery management and public plot directory for 200 plots, featuring Firebase integration and admin edit protection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
