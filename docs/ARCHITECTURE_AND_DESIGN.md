@@ -95,7 +95,7 @@ To maintain a continuous 5-plot row sequence (`grid-cols-5`) across all viewport
 ```
 
 ### Dialogs & Drawers:
-- **`AddPlotModal.tsx`**: Quick entry for vacant plots (Name, Passport ID, Burial Date). Requires Admin authentication.
+- **`AddPlotModal.tsx`**: Quick entry for vacant plots (Name, CNP, ADEVERENȚA number, Burial Date). Requires Admin authentication.
 - **`PlotDetailDrawer.tsx`**: Protected viewer for occupied plots. Two-step safety mechanism requiring Admin login + toggling "Enable Edit Mode".
 - **`AdminAuthModal.tsx`**: Supports live Firebase Authentication (email/password) and a zero-config "Demo Admin" mode.
 - **`FirebaseSetupModal.tsx`**: Project credentials configuration, security rules copy utility, and one-click database publish tool.
@@ -112,7 +112,8 @@ export interface PlotRecord {
   plotNumber: number;  // Integer 1 to 200
   status: 'vacant' | 'occupied';
   fullName?: string;   // Deceased full legal name
-  passportId?: string; // Passport or National ID number
+  cnp?: string;        // Cod Numeric Personal (CNP)
+  adeverinta?: string | number; // Official burial ADEVERENȚA document number
   burialDate?: string; // ISO date string (YYYY-MM-DD)
   notes?: string;      // Optional grave notes or next-of-kin details
   updatedAt?: string;  // ISO timestamp of last modification

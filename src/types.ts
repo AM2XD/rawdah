@@ -3,7 +3,9 @@ export interface PlotRecord {
   plotNumber: number; // 1 to 200
   status: 'vacant' | 'occupied';
   fullName?: string;
-  passportId?: string;
+  cnp?: string; // Personal Numeric Code (CNP)
+  passportId?: string; // Legacy fallback for cnp
+  adeverinta?: string | number; // ADEVERENȚA number
   burialDate?: string; // YYYY-MM-DD
   notes?: string;
   updatedAt?: string;

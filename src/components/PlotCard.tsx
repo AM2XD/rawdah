@@ -42,7 +42,7 @@ export const PlotCard: React.FC<PlotCardProps> = ({
       }}
       title={
         isOccupied
-          ? `Plot #${plot.plotNumber} - Occupied by ${plot.fullName || 'Deceased'} (Passport: ${plot.passportId || 'N/A'})`
+          ? `Plot #${plot.plotNumber} - Occupied by ${plot.fullName || 'Deceased'} (CNP: ${plot.cnp || plot.passportId || 'N/A'}${plot.adeverinta ? `, ADEVERENȚA: ${plot.adeverinta}` : ''})`
           : `Plot #${plot.plotNumber} - Vacant (Click to record burial)`
       }
       className={`relative group rounded-xl sm:rounded-2xl transition-all duration-150 cursor-pointer overflow-hidden border flex flex-col justify-between text-left select-none active:scale-[0.97] ${
@@ -152,11 +152,21 @@ export const PlotCard: React.FC<PlotCardProps> = ({
                 </h4>
               </div>
 
-              <div className="pt-1 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-[10px] text-slate-500">ID:</span>
-                <span className="font-mono tabular-nums font-semibold text-[#0F3D2E] bg-amber-50 px-1 rounded border border-amber-200/50 text-[10px]">
-                  {plot.passportId || "—"}
-                </span>
+              <div className="pt-1 border-t border-slate-100 flex flex-col gap-1 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-500 font-medium">CNP:</span>
+                  <span className="font-mono tabular-nums font-semibold text-[#0F3D2E] bg-amber-50 px-1 rounded border border-amber-200/50 text-[10px]">
+                    {plot.cnp || plot.passportId || "—"}
+                  </span>
+                </div>
+                {plot.adeverinta && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] text-slate-500 font-medium">ADEVERINȚA:</span>
+                    <span className="font-mono tabular-nums font-semibold text-[#0F3D2E] bg-slate-50 px-1 rounded border border-slate-200 text-[10px]">
+                      #{plot.adeverinta}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

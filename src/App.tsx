@@ -78,14 +78,16 @@ export default function App() {
   // Handle saving a new burial in a vacant plot
   const handleSaveNewBurial = async (
     plotNumber: number,
-    data: { fullName: string; passportId: string; burialDate?: string; notes?: string }
+    data: { fullName: string; cnp: string; passportId?: string; adeverinta?: string; burialDate?: string; notes?: string }
   ) => {
     const updated = await updatePlotRecord(
       plotNumber,
       {
         status: 'occupied',
         fullName: data.fullName,
-        passportId: data.passportId,
+        cnp: data.cnp,
+        passportId: data.cnp || data.passportId,
+        adeverinta: data.adeverinta,
         burialDate: data.burialDate,
         notes: data.notes,
       },
@@ -142,8 +144,9 @@ export default function App() {
     const q = searchQuery.toLowerCase().trim();
     const numMatch = plot.plotNumber.toString().includes(q);
     const nameMatch = plot.fullName?.toLowerCase().includes(q) ?? false;
-    const passportMatch = plot.passportId?.toLowerCase().includes(q) ?? false;
-    return numMatch || nameMatch || passportMatch;
+    const cnpMatch = (plot.cnp || plot.passportId)?.toLowerCase().includes(q) ?? false;
+    const adeverintaMatch = plot.adeverinta ? String(plot.adeverinta).toLowerCase().includes(q) : false;
+    return numMatch || nameMatch || cnpMatch || adeverintaMatch;
   }).length;
 
   return (
@@ -257,7 +260,7 @@ export default function App() {
             &ldquo;Indeed we belong to Allah, and indeed to Him we will return.&rdquo; (إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ)
           </p>
           <div className="text-[11px] text-[#D4AF37]/90 font-serif">
-            روضة الشريفة
+            روضة المسلم
           </div>
         </div>
       </footer>
@@ -303,10 +306,10 @@ export default function App() {
         }}
       />
 
-      {/* Gentle Floating Notification Toast */}
+      {/* Gentle Floating Notification Toast (Aligned to the middle) */}
       {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 bg-[#0F3D2E] text-[#FDFBF7] border border-[#D4AF37] px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs font-semibold animate-in slide-in-from-bottom duration-200">
-          <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0F3D2E] text-[#FDFBF7] border border-[#D4AF37] px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-semibold animate-in slide-in-from-bottom duration-200 max-w-[90vw] text-center">
+          <CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}

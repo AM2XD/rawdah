@@ -62,7 +62,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search Plot #, Name, or Passport / ID..."
+              placeholder="Search Plot #, Name, CNP, or Adeverință..."
               className="w-full pl-10 pr-10 py-2.5 bg-white border border-[#D4AF37]/40 rounded-xl text-xs sm:text-sm text-[#0F3D2E] placeholder-[#0F3D2E]/50 focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] focus:border-transparent transition-shadow shadow-xs"
             />
             {searchQuery && (

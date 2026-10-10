@@ -43,9 +43,10 @@ export const PlotGrid: React.FC<PlotGridProps> = ({
 
       const numMatch = plot.plotNumber.toString().includes(q);
       const nameMatch = plot.fullName?.toLowerCase().includes(q) ?? false;
-      const passportMatch = plot.passportId?.toLowerCase().includes(q) ?? false;
+      const cnpMatch = (plot.cnp || plot.passportId)?.toLowerCase().includes(q) ?? false;
+      const adeverintaMatch = plot.adeverinta ? String(plot.adeverinta).toLowerCase().includes(q) : false;
 
-      return numMatch || nameMatch || passportMatch;
+      return numMatch || nameMatch || cnpMatch || adeverintaMatch;
     });
   }, [plots, searchQuery, filter]);
 
@@ -140,7 +141,8 @@ export const PlotGrid: React.FC<PlotGridProps> = ({
             Boolean(searchQuery.trim()) &&
             (plot.plotNumber.toString() === searchQuery.trim() ||
               (plot.fullName?.toLowerCase().includes(searchQuery.toLowerCase().trim()) ?? false) ||
-              (plot.passportId?.toLowerCase().includes(searchQuery.toLowerCase().trim()) ?? false));
+              ((plot.cnp || plot.passportId)?.toLowerCase().includes(searchQuery.toLowerCase().trim()) ?? false) ||
+              (plot.adeverinta ? String(plot.adeverinta).toLowerCase().includes(searchQuery.toLowerCase().trim()) : false));
 
           return (
             <div key={plot.id} dir="ltr" className="h-full">

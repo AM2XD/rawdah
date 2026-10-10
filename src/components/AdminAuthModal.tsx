@@ -113,7 +113,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div
-        className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden animate-in zoom-in-95 duration-200"
+        className="w-full max-w-md mx-auto my-auto bg-white rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
       >

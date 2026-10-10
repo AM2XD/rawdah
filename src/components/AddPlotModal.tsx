@@ -7,7 +7,7 @@ interface AddPlotModalProps {
   plot: PlotRecord | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (plotNumber: number, data: { fullName: string; passportId: string; burialDate?: string; notes?: string }) => Promise<void>;
+  onSave: (plotNumber: number, data: { fullName: string; cnp: string; passportId?: string; adeverinta?: string; burialDate?: string; notes?: string }) => Promise<void>;
   adminUser: AdminUser | null;
   onOpenAdminLogin: () => void;
 }
@@ -21,7 +21,8 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
   onOpenAdminLogin,
 }) => {
   const [fullName, setFullName] = useState('');
-  const [passportId, setPassportId] = useState('');
+  const [cnp, setCnp] = useState('');
+  const [adeverinta, setAdeverinta] = useState('');
   const [burialDate, setBurialDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,8 +44,8 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
       return;
     }
 
-    if (!passportId.trim()) {
-      setErrorMessage('Please enter the Passport or National ID number.');
+    if (!cnp.trim()) {
+      setErrorMessage('Please enter the CNP (Cod Numeric Personal).');
       return;
     }
 
@@ -52,13 +53,16 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
       setIsSubmitting(true);
       await onSave(plot.plotNumber, {
         fullName: fullName.trim(),
-        passportId: passportId.trim().toUpperCase(),
+        cnp: cnp.trim().toUpperCase(),
+        passportId: cnp.trim().toUpperCase(), // backward compatibility
+        adeverinta: adeverinta.trim() || undefined,
         burialDate: burialDate || new Date().toISOString().split('T')[0],
         notes: notes.trim() || undefined,
       });
       // Reset form
       setFullName('');
-      setPassportId('');
+      setCnp('');
+      setAdeverinta('');
       setNotes('');
       onClose();
     } catch (err: any) {
@@ -69,14 +73,12 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
       <div
-        className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden transform transition-all animate-in slide-in-from-bottom sm:slide-in-from-bottom-4 duration-200"
+        className="w-full max-w-md mx-auto my-auto bg-white rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
       >
-        {/* Mobile Pull Handle */}
-        <div className="sm:hidden w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5" />
 
         {/* Modal Header */}
         <div className="bg-[#0F3D2E] text-[#FDFBF7] px-5 py-4 border-b border-[#D4AF37]/30 flex items-center justify-between">
@@ -153,10 +155,10 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
               </div>
             </div>
 
-            {/* Passport / ID Number Field */}
+            {/* CNP Field */}
             <div>
               <label className="block text-xs font-bold text-[#0F3D2E] uppercase tracking-wider mb-1.5">
-                Passport / National ID Number <span className="text-red-600">*</span>
+                CNP <span className="text-red-600">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -165,9 +167,29 @@ export const AddPlotModal: React.FC<AddPlotModalProps> = ({
                 <input
                   type="text"
                   required
-                  value={passportId}
-                  onChange={(e) => setPassportId(e.target.value)}
-                  placeholder="e.g., A84920194 or 1029384756"
+                  value={cnp}
+                  onChange={(e) => setCnp(e.target.value)}
+                  placeholder="e.g., 1920412123456"
+                  className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#D4AF37]/40 rounded-xl text-sm font-mono text-[#0F3D2E] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] focus:border-transparent transition-shadow"
+                />
+              </div>
+            </div>
+
+            {/* ADEVERENȚA Field */}
+            <div>
+              <label className="block text-xs font-bold text-[#0F3D2E] uppercase tracking-wider mb-1.5">
+                ADEVERENȚA (Număr)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={adeverinta}
+                  onChange={(e) => setAdeverinta(e.target.value)}
+                  placeholder="e.g., 48201"
                   className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#D4AF37]/40 rounded-xl text-sm font-mono text-[#0F3D2E] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] focus:border-transparent transition-shadow"
                 />
               </div>

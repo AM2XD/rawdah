@@ -211,7 +211,9 @@ export async function vacatePlotRecord(
     {
       status: 'vacant',
       fullName: '',
+      cnp: '',
       passportId: '',
+      adeverinta: '',
       burialDate: '',
       notes: '',
     },

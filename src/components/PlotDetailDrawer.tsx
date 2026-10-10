@@ -36,7 +36,8 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [fullName, setFullName] = useState('');
-  const [passportId, setPassportId] = useState('');
+  const [cnp, setCnp] = useState('');
+  const [adeverinta, setAdeverinta] = useState('');
   const [burialDate, setBurialDate] = useState('');
   const [notes, setNotes] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -48,7 +49,8 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
   useEffect(() => {
     if (plot) {
       setFullName(plot.fullName || '');
-      setPassportId(plot.passportId || '');
+      setCnp(plot.cnp || plot.passportId || '');
+      setAdeverinta(plot.adeverinta !== undefined && plot.adeverinta !== null ? String(plot.adeverinta) : '');
       setBurialDate(plot.burialDate || '');
       setNotes(plot.notes || '');
       setIsEditMode(false);
@@ -83,8 +85,8 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
       return;
     }
 
-    if (!passportId.trim()) {
-      setErrorMessage('Passport / ID Number is required.');
+    if (!cnp.trim()) {
+      setErrorMessage('CNP is required.');
       return;
     }
 
@@ -92,7 +94,9 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
       setIsSaving(true);
       await onUpdate(plot.plotNumber, {
         fullName: fullName.trim(),
-        passportId: passportId.trim().toUpperCase(),
+        cnp: cnp.trim().toUpperCase(),
+        passportId: cnp.trim().toUpperCase(), // Maintain backwards compatibility
+        adeverinta: adeverinta.trim() || undefined,
         burialDate: burialDate || undefined,
         notes: notes.trim() || undefined,
       });
@@ -119,14 +123,12 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
       <div
-        className="w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden transform transition-all animate-in slide-in-from-bottom sm:slide-in-from-bottom-4 duration-200"
+        className="w-full max-w-lg mx-auto my-auto bg-white rounded-2xl shadow-2xl border border-[#D4AF37]/35 overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
       >
-        {/* Mobile Pull Handle */}
-        <div className="sm:hidden w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5" />
 
         {/* Header */}
         <div className="bg-[#0F3D2E] text-[#FDFBF7] px-5 py-4 border-b border-[#D4AF37]/30 flex items-center justify-between">
@@ -271,10 +273,10 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
               )}
             </div>
 
-            {/* Passport / ID Number */}
+            {/* CNP Field */}
             <div>
               <label className="block text-xs font-bold text-[#0F3D2E] uppercase tracking-wider mb-1">
-                Passport / National ID Number
+                CNP
               </label>
               {isEditMode ? (
                 <div className="relative">
@@ -284,15 +286,43 @@ export const PlotDetailDrawer: React.FC<PlotDetailDrawerProps> = ({
                   <input
                     type="text"
                     required
-                    value={passportId}
-                    onChange={(e) => setPassportId(e.target.value)}
+                    value={cnp}
+                    onChange={(e) => setCnp(e.target.value)}
+                    placeholder="e.g., 1920412123456"
                     className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#D4AF37]/50 rounded-xl text-sm font-mono text-[#0F3D2E] focus:ring-2 focus:ring-[#0F3D2E]"
                   />
                 </div>
               ) : (
                 <div className="p-3 rounded-xl bg-white border border-slate-200 font-mono text-sm text-[#0F3D2E] flex items-center justify-between">
-                  <span>{plot.passportId || "—"}</span>
-                  <span className="text-[10px] text-slate-400 uppercase font-sans">Verified ID</span>
+                  <span>{plot.cnp || plot.passportId || "—"}</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-sans">CNP Oficial</span>
+                </div>
+              )}
+            </div>
+
+            {/* ADEVERENȚA (Number) Field */}
+            <div>
+              <label className="block text-xs font-bold text-[#0F3D2E] uppercase tracking-wider mb-1">
+                ADEVERENȚA
+              </label>
+              {isEditMode ? (
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={adeverinta}
+                    onChange={(e) => setAdeverinta(e.target.value)}
+                    placeholder="e.g., 48201"
+                    className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#D4AF37]/50 rounded-xl text-sm font-mono text-[#0F3D2E] focus:ring-2 focus:ring-[#0F3D2E]"
+                  />
+                </div>
+              ) : (
+                <div className="p-3 rounded-xl bg-white border border-slate-200 font-mono text-sm text-[#0F3D2E] flex items-center justify-between">
+                  <span>{plot.adeverinta !== undefined && plot.adeverinta !== null && plot.adeverinta !== '' ? String(plot.adeverinta) : "—"}</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-sans">Nr. Adeverință</span>
                 </div>
               )}
             </div>
